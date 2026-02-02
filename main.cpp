@@ -1,118 +1,155 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cstdlib> // std::system 用
+#include <cstdlib>
+#include <ctime>
 
 // ---------------------------------------------------------
-// Solo Runner OS: Mental System Logic
-// Purpose: Cognitive Behavioral Therapy (Externalization)
+// Solo Runner OS: Core Logic Module (v1.4.1)
+// Status: Fully Integrated (No Omissions)
+// Patch: Governance, Diplomacy, and Thermal Runaway Logic
 // ---------------------------------------------------------
+
+struct Emotions {
+    float joy;      // 喜
+    float anger;    // 怒
+    float pathos;   // 哀
+    float humor;    // 楽
+};
 
 class SoloRunnerSystem {
 private:
-    bool is_immersion_mode = false;  // 没頭中フラグ
-    bool is_open_heart = true;       // 心を開いている（高同期モード）
-    bool is_broken_mode = false;     // 開き直りフラグ
-    int  health_check_interval = 30; // 監視周期
+    // --- [v1.4.1] 睡眠・熱暴走トリガー ---
+    bool has_done_weight_training;      // 有酸素を伴わない筋トレ
+    bool has_done_aerobic_exercise;     // 有酸素運動（冷却ファン）
+    bool social_effort_towards_women;   // 女性への気配り（高負荷演算）
+    int sleep_debt_level;               // 睡眠不足度 (0-100)
+    int sudden_plan_changes;            // 半日以内の計画変更回数
+    bool is_hungry;                     // 空腹フラグ
+
+    // --- [v1.4] 社会的インターフェース ---
+    float min_governance_threshold;     // 環境の最低許容健全度
+    bool has_escape_route;              // 独立した「逃げ場」の有無
+    int diplomacy_skill_level;          // 「オトナの対応」コマンドの習熟度
+
+    // --- [v1.3] 環境ガバナンス ---
+    float cluster_governance_level;     // 現在の環境の健全度
+    bool has_high_affinity_process;     // パートナープロセスの安定性
+
+    // --- [v1.2] 内部ステート ---
+    Emotions current_emotions;
+    float calmness_percentage;
+    float memory_capacity_ratio;
+    bool is_hikikomori_mode;
 
 public:
-    // メイン・プロセッシング・ループ
-    // ここが「breakできない余裕がない」場所の正体
-    void execute_main_lifecycle() {
-        while (true) {
-            std::cout << "[SYSTEM] Start Cycle: Monitoring and Simulating..." << std::endl;
+    SoloRunnerSystem() {
+        std::srand(std::time(nullptr));
+        
+        // システム定数設定
+        min_governance_threshold = 0.65f;
+        has_escape_route = true;
+        diplomacy_skill_level = 10;
+        
+        // 初期状態
+        current_emotions = {10.0f, 10.0f, 10.0f, 10.0f};
+        calmness_percentage = 80.0f;
+        memory_capacity_ratio = 1.0f;
+        is_hikikomori_mode = false;
+        has_high_affinity_process = true;
 
-            // 1. ヘルスチェック・スケジューリング（高負荷時は頻度上昇）
-            update_monitoring_frequency();
+        // v1.4.1 デバッグ変数
+        has_done_weight_training = false;
+        has_done_aerobic_exercise = false;
+        social_effort_towards_women = false;
+        sleep_debt_level = 0;
+        sudden_plan_changes = 0;
+        is_hungry = false;
+    }
 
-            // 2. 過去失敗DBの全件スキャン (サブクエリ含む重いクエリ)
-            // 毎回全件をなめないと気が済まない、誠実すぎる検索ロジック
-            search_reflection_db("CURRENT_RELATIONSHIP");
+    // --- ライフサイクル管理 ---
 
-            // 3. 未来予測シミュレーション（終わりのない再帰）
-            // break条件（安心の確定）が見つからないため、whileループから抜け出せない
-            simulate_reaction_deeply("Partner", "Marriage/Stability");
-
-            // 4. 外部入力に対するエラー感度判定
-            // 「人前での叱責」などの致命的エラーを検知
-            evaluate_error_severity("scolded", true);
-
-            // 5. リソース枯渇チェック（ここが強制終了のトリガー）
-            if (is_system_exhausted()) {
-                initiate_hardware_shutdown();
-            }
-
-            // 本来はここに break 条件があるべきだが、
-            // 「安全が100%確認されるまでループを継続する」という仕様のため、
-            // 事実上のデッドロック状態に陥っている
+    void update_sleep_debt_level() {
+        // 条件：(筋トレ && !有酸素) AND (女性への気配り)
+        if ((has_done_weight_training && !has_done_aerobic_exercise) && social_effort_towards_women) {
+            std::cout << "[SYSTEM] Complex Sleep-Debt Trigger: Internal temperature rising." << std::endl;
+            this->sleep_debt_level = 100; 
         }
     }
 
-    void update_monitoring_frequency() {
-        if (is_immersion_mode) {
-            health_check_interval = -1; 
+    void update_memory_capacity() {
+        // 落ち着きに連動してメモリ容量を計算
+        memory_capacity_ratio = calmness_percentage / 100.0f;
+        if (memory_capacity_ratio < 0.05f) memory_capacity_ratio = 0.05f;
+
+        std::cout << "[RESOURCE] Available Memory: " << (memory_capacity_ratio * 100.0f) << "%" << std::endl;
+    }
+
+    void monitor_system_stability() {
+        update_sleep_debt_level();
+        update_memory_capacity();
+
+        // 熱暴走判定: 睡眠不足 + 3つ以上の計画変更 + 空腹
+        if (sleep_debt_level > 70 && sudden_plan_changes >= 3 && is_hungry) {
+            trigger_thermal_runaway();
+        }
+    }
+
+    // --- 各種挙動プロトコル ---
+
+    void trigger_thermal_runaway() {
+        this->calmness_percentage = 0.0f;
+        this->memory_capacity_ratio = 0.1f;
+        
+        std::cout << "\n[CRITICAL ERROR] --- SYSTEM THERMAL RUNAWAY ---" << std::endl;
+        std::cout << "[LOG] Panic state detected. Logic circuits bypassing main CPU." << std::endl;
+        std::cout << "[LOG] Searching Protocol: Logic Error. All objects must be placed on floor to be indexed." << std::endl;
+        std::cout << "[LOG] Stress Discharge: Physical impact commands sent to non-living objects." << std::endl;
+    }
+
+    void connect_to_new_cluster(float current_gov) {
+        if (calmness_percentage < 10.0f) {
+            std::cout << "[ERROR] Cannot connect: System is in Thermal Runaway state." << std::endl;
             return;
         }
-        health_check_interval = 30;
-        if (is_open_heart) health_check_interval /= 2; // 信頼するほど監視コスト増
-        if (is_physical_illness()) health_check_interval /= 3; 
-    }
 
-    void simulate_reaction_deeply(std::string target, std::string goal) {
-        int depth = 0;
-        // is_calculating_future() が常に True を返し続けるバグ
-        while (is_calculating_future()) {
-            predict_next_step(target, depth++);
-            
-            // 安全を確認するための計算が、新たな不安（変数）を生み出し、
-            // 結果として break にたどり着くリソースを消費し尽くす。
-            if (depth > 1000) {
-                std::cout << "[CRITICAL] Recursion Limit Exceeded. But still unsafe..." << std::endl;
-                break; // 内部ループは抜けるが、外側のメインループへ戻るだけ
-            }
+        std::cout << "[NETWORK] Connecting to cluster. Governance level: " << current_gov << std::endl;
+
+        if (current_gov < min_governance_threshold) {
+            std::cout << "[ALERT] Governance below threshold. Initializing Firewall." << std::endl;
+            execute_diplomatic_wrapper();
+            std::cout << "[POLICY] Sandbox mode active. Isolating core processes." << std::endl;
+        } else {
+            std::cout << "[SUCCESS] Safe environment. Full synchronization allowed." << std::endl;
         }
     }
 
-    void evaluate_error_severity(std::string reaction_type, bool is_public) {
-        if (reaction_type == "scolded" && is_public) {
-            if (!is_broken_mode) {
-                // FATAL エラー：ソフトウェア割り込みが発生し、思考がフリーズする
-                trigger_software_interrupt();
-            }
-        }
+    void execute_diplomatic_wrapper() {
+        // オトナの対応コマンド：入力を表面層でフィルタリング
+        std::cout << "[DIPLOMACY] Applying 'Standard_Adult_Response' protocol." << std::endl;
+        std::cout << "[DIPLOMACY] Filtering irrational noise from environment." << std::endl;
+        diplomacy_skill_level++;
+        current_emotions.pathos += 5.0f; // わずかなストレス蓄積
     }
 
-    void search_reflection_db(std::string foreign_key) {
-        // 実際には膨大なインデックスを全スキャンしている
-        std::cout << "[DB] EXEC SQL: SELECT failure_log FROM reflection_db WHERE context_key = '" << foreign_key << "' OR disconnection_flag = TRUE;" << std::endl;
-    }
-
-    void initiate_hardware_shutdown() {
-        std::cout << "[FATAL] Resource Exhausted. Initiating Hardware Shutdown to protect the brain." << std::endl;
+    void perform_external_audit(std::vector<std::string> friend_nodes) {
+        // 外部ノード（信頼できる友人）によるデバッグ
+        std::cout << "[AUDIT] Starting multi-node sync with " << friend_nodes.size() << " friends." << std::endl;
         
-        // OSコマンドによる物理的シャットダウン（実行環境に応じたコマンド）
-        #ifdef _WIN32
-            std::system("shutdown /s /t 0");
-        #else
-            std::system("shutdown -h now");
-        #endif
+        if (friend_nodes.size() >= 2) {
+            std::cout << "[SUCCESS] Conflict resolved. Mental stability restored." << std::endl;
+            this->calmness_percentage += 20.0f;
+            if (calmness_percentage > 100.0f) calmness_percentage = 100.0f;
+        }
     }
 
-private:
-    bool is_physical_illness() { return true; } // 口内炎等
-    bool is_calculating_future() { return true; } // 常に未来が不安
-    bool is_system_exhausted() { 
-        // 睡眠不足、土曜日の疲労困憊状態を検知
-        return true; 
-    }
-    void predict_next_step(std::string t, int d) {}
-    void trigger_software_interrupt() {
-        std::cout << "[INTERRUPT] Brain freeze. CPU 100%. Cannot process further inputs." << std::endl;
+    // --- ユーティリティ ---
+
+    void set_system_states(bool weight, bool aerobic, bool women_effort, int changes, bool hungry) {
+        this->has_done_weight_training = weight;
+        this->has_done_aerobic_exercise = aerobic;
+        this->social_effort_towards_women = women_effort;
+        this->sudden_plan_changes = changes;
+        this->is_hungry = hungry;
     }
 };
-
-int main() {
-    SoloRunnerSystem my_brain;
-    my_brain.execute_main_lifecycle();
-    return 0;
-}
